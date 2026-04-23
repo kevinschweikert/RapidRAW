@@ -4806,6 +4806,11 @@ fn frontend_ready(
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    #[cfg(target_os = "android")]
+    rustls::crypto::ring::default_provider()
+        .install_default()
+        .expect("failed to install ring as the default rustls crypto provider");
+
     let mut builder = tauri::Builder::default();
 
     #[cfg(not(any(target_os = "android", target_os = "ios")))]
